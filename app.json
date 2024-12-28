@@ -3,6 +3,7 @@
     "name": "your-app-name",
     "slug": "your-app-slug",
     "version": "1.0.0",
+    "scheme": "yourappscheme",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
@@ -25,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf"
+    ]
   }
 }

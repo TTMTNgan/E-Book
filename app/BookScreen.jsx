@@ -11,76 +11,96 @@ const ios = Platform.OS == 'ios';
 
 export default function BookScreen() {
   const params = useLocalSearchParams();
-  const { id, title, author, description } = params;
+  const bookCover = require('../assets/images/books/1.png');
   
+  const handleReadBook = () => {
+    router.push({
+      pathname: "/ReadBookScreen",
+      params: {
+        id: params.id,
+        title: params.title
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
-      {/* Header với nút back và share */}
-      <SafeAreaView style={styles.header}>
-        <BackButton size={24} />
-        <ShareIcon size={24} color="black" />
-      </SafeAreaView>
+      {/* Background Image with Blur */}
+      <Image 
+        source={bookCover}
+        style={styles.backgroundImage}
+        blurRadius={5}
+      />
+      <View style={styles.gradientOverlay} />
 
-      {/* Book Cover và thông tin cơ bản */}
-      <View style={styles.bookInfo}>
-        <Image 
-          source={require('../assets/images/books/1.png')}
-          style={styles.coverImage}
-          resizeMode="contain"
-        />
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <SafeAreaView style={styles.header}>
+          <BackButton style={styles.headerIcon} />
+          <ShareIcon size={24} color="#FFF" style={styles.headerIcon} />
+        </SafeAreaView>
 
-        <Text style={styles.title}>{title || "Tên sách"}</Text>
-        <TouchableOpacity style={styles.authorButton}>
-          <Text style={styles.authorText}>Tác giả: {author || "Tác giả"}</Text>
-        </TouchableOpacity>
+        {/* Book Content */}
+        <View style={styles.content}>
+          {/* Cover Image */}
+          <Image 
+            source={bookCover}
+            style={styles.coverImage}
+            resizeMode="contain"
+          />
 
-        {/* Ratings và Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.ratingContainer}>
-            <Text style={styles.ratingNumber}>5.0/5</Text>
-            <View style={styles.stars}>
-              {[1,2,3,4,5].map((_, index) => (
-                <StarIcon key={index} size={16} color="#FFD700" />
-              ))}
+          {/* Book Details */}
+          <View style={styles.detailsContainer}>
+            <Text style={styles.title}>Ai cũng đã từng</Text>
+            <Text style={styles.author}>Lưu Quang Vũ</Text>
+
+            {/* Rating Section */}
+            <View style={styles.ratingSection}>
+              <View style={styles.stars}>
+                {[1,2,3,4,5].map((_, index) => (
+                  <StarIcon key={index} size={16} color="#FFD700" />
+                ))}
+              </View>
+              <Text style={styles.ratingText}>5.0</Text>
+            </View>
+
+            {/* Action Buttons */}
+            <TouchableOpacity 
+              style={styles.readButton}
+              onPress={handleReadBook}
+            >
+              <Text style={styles.readButtonText}>ĐỌC SÁCH</Text>
+            </TouchableOpacity>
+
+            <View style={styles.actionButtons}>
+              <TouchableOpacity style={styles.iconButton}>
+                <HeartIcon size={24} color="#FFF" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton}>
+                <ArrowDownTrayIcon size={24} color="#FFF" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton}>
+                <EllipsisHorizontalIcon size={24} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Categories */}
+            <View style={styles.categories}>
+              <TouchableOpacity style={styles.categoryTag}>
+                <Text style={styles.categoryText}>Thơ - Tản văn</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Description */}
+            <View style={styles.description}>
+              <Text style={styles.descriptionTitle}>Giới thiệu</Text>
+              <Text style={styles.descriptionText}>
+                Lưu Quang Vũ (1948-1988) là một trong những nhà thơ và tác giả kịch nổi bật của Việt Nam, được biết đến với phong cách thơ lãng mạn, sâu sắc và đậm chất nhân văn...
+              </Text>
             </View>
           </View>
-          <View style={styles.viewsContainer}>
-            <Text style={styles.viewsNumber}>4,123</Text>
-            <Text style={styles.viewsText}>lượt xem</Text>
-          </View>
         </View>
-
-        {/* Action Buttons */}
-        <TouchableOpacity style={styles.readButton}>
-          <Text style={styles.readButtonText}>ĐỌC SÁCH</Text>
-        </TouchableOpacity>
-
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.iconButton}>
-            <HeartIcon size={24} color="gray" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <ArrowDownTrayIcon size={24} color="gray" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <EllipsisHorizontalIcon size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Categories */}
-        <View style={styles.categories}>
-          <TouchableOpacity style={styles.categoryTag}>
-            <Text style={styles.categoryText}>Thơ - Tản văn</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Description */}
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}>
-            {description || "Lưu Quang Vũ (1948-1988) là một trong những nhà thơ và tác giả kịch nổi bật của Việt Nam, được biết đến với phong cách thơ lãng mạn, sâu sắc và đậm chất nhân văn..."}
-          </Text>
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -88,87 +108,135 @@ export default function BookScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#1A1A1A',
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject, // Thêm dòng này
+    width: width,
+    height: height*1.2 , // Thay đổi từ height * 0.5 thành height
+    opacity: 0.5,
+  },
+  gradientOverlay: {
+    ...StyleSheet.absoluteFillObject, // Thêm dòng này
+    width: width,
+    height: height*1.2, // Thay đổi từ height * 0.5 thành height
+    backgroundColor: 'rgba(0,0,0,0.7)',
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: ios ? 0 : 16,
   },
-  bookInfo: {
+  headerIcon: {
+    padding: 8,
+  },
+  content: {
     alignItems: 'center',
-    padding: 16,
+    paddingHorizontal: 20,
   },
   coverImage: {
-    width: width * 0.5,
-    height: height * 0.3,
-    borderRadius: 8,
+    width: width * 0.6,
+    height: height * 0.35,
+    borderRadius: 12,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  detailsContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 24,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginTop: 16,
+    color: '#FFF',
     textAlign: 'center',
   },
-  authorButton: {
+  author: {
+    fontSize: 18,
+    color: '#999',
     marginTop: 8,
   },
-  authorText: {
-    color: 'gray',
-    fontSize: 16,
-  },
-  statsContainer: {
+  ratingSection: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    gap: 24,
     marginTop: 16,
-  },
-  ratingContainer: {
-    alignItems: 'center',
+    gap: 8,
   },
   stars: {
     flexDirection: 'row',
+    gap: 4,
   },
-  viewsContainer: {
-    alignItems: 'center',
+  ratingText: {
+    color: '#FFD700',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   readButton: {
     backgroundColor: '#00C853',
     width: '100%',
-    paddingVertical: 12,
-    borderRadius: 24,
+    paddingVertical: 16,
+    borderRadius: 30,
     marginTop: 24,
   },
   readButtonText: {
-    color: 'white',
+    color: '#FFF',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 16,
+    textTransform: 'uppercase',
   },
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 32,
-    marginTop: 16,
+    gap: 40,
+    marginTop: 24,
+  },
+  iconButton: {
+    backgroundColor: '#333',
+    padding: 12,
+    borderRadius: 50,
   },
   categories: {
     flexDirection: 'row',
-    marginTop: 16,
-  },
-  categoryTag: {
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  description: {
     marginTop: 24,
   },
-  descriptionText: {
-    color: 'gray',
-    lineHeight: 24,
+  categoryTag: {
+    backgroundColor: '#333',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
+  categoryText: {
+    color: '#FFF',
+    fontSize: 14,
+  },
+  description: {
+    width: '100%',
+    marginTop: 32,
+    marginBottom: 32,
+  },
+  descriptionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 12,
+  },
+  descriptionText: {
+    color: '#999',
+    fontSize: 16,
+    lineHeight: 24,
+  }
 });
