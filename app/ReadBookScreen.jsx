@@ -1,3 +1,4 @@
+// ReadBookScreen.jsx
 import { View, Text, ScrollView, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import SummaryModal from '../components/SummaryModal';
 import React, { useState, useEffect, useRef } from 'react';
@@ -8,7 +9,6 @@ import { BookmarkIcon as BookmarkSolid } from 'react-native-heroicons/solid';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import Pdf from 'react-native-pdf'; 
 
 // Components
 import BackButton from '../components/BackButton';
@@ -44,8 +44,45 @@ export default function ReadBookScreen() {
   ];
 
   useEffect(() => {
+    fetchBookContent();
     loadBookmark();
   }, [id]);
+
+  const fetchBookContent = async () => {
+    try {
+      // Giả lập API call
+      setTimeout(() => {
+        setBookContent({
+          title: "Tuyển tập thơ Lưu Quang Vũ",
+          chapters: [
+            {
+              id: 1,
+              title: "Chương 1: Tuổi trẻ",
+              content: `Tuổi hai mươi tôi đi giữa thành phố này
+              Đường phố dài hun hút nỗi nhớ xanh...`
+            },
+            // Thêm nội dung chapters khác
+          ]
+        });
+        setLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error('Error fetching book content:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleScroll = (event) => {
+    const offset = event.nativeEvent.contentOffset.y;
+    const height = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+    
+    const total = Math.ceil(contentHeight / height);
+    setTotalPages(total);
+    
+    const current = Math.ceil((offset + height) / height);
+    setCurrentPage(current);
+  };
 
   const toggleBookmark = async () => {
     setIsBookmarked(!isBookmarked);
@@ -54,7 +91,7 @@ export default function ReadBookScreen() {
         await saveBookmark({
           bookId: id,
           page: currentPage,
-          // Here you may want to fetch scroll position another way since Pdf doesn't have scroll position tracking like ScrollView
+          scrollPosition: scrollViewRef.current?.scrollOffset
         });
       } else {
         await AsyncStorage.removeItem(`bookmark_${id}`);
@@ -81,8 +118,10 @@ export default function ReadBookScreen() {
       if (bookmark) {
         const bookmarkData = JSON.parse(bookmark);
         setIsBookmarked(true);
-        // Handle restoring bookmark
-        setCurrentPage(bookmarkData.page);
+        scrollViewRef.current?.scrollTo({
+          y: bookmarkData.scrollPosition,
+          animated: false
+        });
       }
     } catch (error) {
       console.error('Error loading bookmark:', error);
@@ -144,17 +183,42 @@ export default function ReadBookScreen() {
         </View>
 
         {/* Content */}
-        {/* <Pdf
-          source={require('../filetest/BPTT.pdf')}
-          onLoadComplete={(numberOfPages, filePath) => {
-            console.log(`number of pages: ${numberOfPages}`);
-            setTotalPages(numberOfPages);
-          }}
-          onPageChanged={(page, numberOfPages) => {
-            setCurrentPage(page);
-          }}
-          style={styles.pdf}
-        /> */}
+        <ScrollView 
+          ref={scrollViewRef}
+          style={styles.content}
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <Text>Đang tải nội dung...</Text>
+            </View>
+          ) : (
+            <View style={styles.bookContent}>
+              {bookContent?.chapters.map((chapter) => (
+                <View key={chapter.id} style={styles.chapter}>
+                  <Text style={[
+                    styles.chapterTitle,
+                    { fontFamily: fontFamily === 'System' ? undefined : fontFamily }
+                  ]}>
+                    {chapter.title}
+                  </Text>
+                  <Text style={[
+                    styles.chapterContent,
+                    {
+                      fontSize: fontSize,
+                      lineHeight: fontSize * lineHeight,
+                      fontFamily: fontFamily === 'System' ? undefined : fontFamily
+                    }
+                  ]}>
+                    {chapter.content}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </ScrollView>
 
         {/* Settings Modal */}
         <Modal
@@ -274,15 +338,29 @@ const styles = StyleSheet.create({
   headerButton: {
     padding: 4,
   },
-  pdf: {
+  content: {
     flex: 1,
-    padding: 16, // Adjust the padding as needed
+    padding: 16,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  bookContent: {
+    gap: 24,
+  },
+  chapter: {
+    gap: 16,
+  },
+  chapterTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+  chapterContent: {
+    color: '#4B5563',
   },
   pageIndicator: {
     position: 'absolute',
