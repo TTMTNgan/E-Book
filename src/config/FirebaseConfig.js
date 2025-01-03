@@ -1,8 +1,6 @@
-// src/config/FirebaseConfig.js
-import { initializeApp } from '@react-native-firebase/app';
-import { getAuth } from '@react-native-firebase/auth';  // Thêm cho auth
-import { getFirestore } from '@react-native-firebase/firestore';  // Thêm cho Firestore
-import { getStorage } from '@react-native-firebase/storage';  // Thêm cho Storage
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 // Firebase config cho ứng dụng React Native
 const firebaseConfig = {
@@ -17,12 +15,9 @@ const firebaseConfig = {
 };
 
 // Khởi tạo Firebase app
-const app = initializeApp(firebaseConfig);
-
-// Khởi tạo các dịch vụ Firebase
-export const auth = getAuth(app);  // Đảm bảo Firebase Auth hoạt động
-export const db = getFirestore(app);  // Kết nối Firestore
-export const storage = getStorage(app);  // Kết nối Storage
+export const firebaseAuth = auth();
+export const firebaseFirestore = firestore();
+export const firebaseStorage = storage();
 
 export default app;
 

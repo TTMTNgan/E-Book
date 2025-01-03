@@ -2975,29 +2975,29 @@
   resolved "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-11.4.1.tgz"
   integrity sha512-B0BYAkghz3Q2V09BF88RA601XursIEA111tnc2JOaN7axJWmNefmfjZqw/KdSxKZp7CZUuPpjBmz/WCR9uaHYg==
 
-"@react-native-firebase/app@^21.6.1", "@react-native-firebase/app@21.6.1":
-  version "21.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-21.6.1.tgz"
-  integrity sha512-o1i3aQMtJeofue+73j/8KO2l+/bRHaSHqOl7FtIeZfajQZaulaROugD2Rr2Mlc1o7LfEUyoDOoij9nGdrydEyw==
+"@react-native-firebase/app@^21.6.2", "@react-native-firebase/app@21.6.2":
+  version "21.6.2"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-21.6.2.tgz"
+  integrity sha512-yNEzADATa565Nfp1EoWdUgxUw9myCk+u0dblTOu0WQcWddBxug7zEhdvol0k2vkRlEuyLb0biTt7oUy72kKJpw==
   dependencies:
     firebase "10.13.2"
 
-"@react-native-firebase/auth@^21.6.1":
-  version "21.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-21.6.1.tgz"
-  integrity sha512-B/sVBB7QKpE/MLcBKnVM3LHo5XRj7A9uFc3zOkBmQl3JQ37bHqqdlRJxgnbIIvRY5Wz2sPy2hjRwjC0+b04kZg==
+"@react-native-firebase/auth@^21.6.2":
+  version "21.6.2"
+  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-21.6.2.tgz"
+  integrity sha512-/U8V7B063ShawbEomgq9fzl8mk4eJfWP+f3rxRrIjVAl6AQTIWBbLZ2qFThQpmD5X5YKHX2z1NnZ+DVNVQHDjA==
   dependencies:
     plist "^3.1.0"
 
-"@react-native-firebase/firestore@^21.6.1":
-  version "21.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-21.6.1.tgz"
-  integrity sha512-i3RQM11zTRCYc7/KdD0MiCm7UyyTecDXG/89lEv5hvVJMS6ltIfK+0rDheSpBzYlK4kNoK765jnvVAQxIFEqbA==
+"@react-native-firebase/firestore@^21.6.2":
+  version "21.6.2"
+  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-21.6.2.tgz"
+  integrity sha512-TgG8uyVp7WuCzVxh8b4LoTU0TolP8pgsLvb/TSwqVN8kNvnczRfc2zcoAmCP86SpHW1EFCMra71Z2uUojqtQkQ==
 
-"@react-native-firebase/storage@^21.6.1":
-  version "21.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-21.6.1.tgz"
-  integrity sha512-97PsRf1i+0TdQgbLV0WD/HDB+3cae7JWimqc8eTGVc+QK2OuooYgs34flnbDkXu71brzDWdGJRWijsZhtORggg==
+"@react-native-firebase/storage@^21.6.2":
+  version "21.6.2"
+  resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-21.6.2.tgz"
+  integrity sha512-Xj7sZxUBEiB5sYzL0FEagjL8yW5+V/tBqLx1NTTOFuZgNzqokHTaVqy1ub4T+IYO3b/QZqyqDWCQLvPOr12W2A==
 
 "@react-native-google-signin/google-signin@^13.1.0":
   version "13.1.0"

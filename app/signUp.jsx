@@ -1,55 +1,56 @@
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import ScreenWrapper from '../components/ScreenWrapper';
 import { theme } from '../constants/theme';
 import Icon from '../assets/icons';
 import { StatusBar } from 'expo-status-bar';
 import BackButton from '../components/BackButton';
 import { useRouter } from 'expo-router';
-import { hp, wp } from '../helpers/common';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { auth } from '../src/config/FirebaseConfig';  // Ensure you import auth from your FirebaseConfig file
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../src/config/FirebaseConfig';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const SignUp = () => {
   const router = useRouter();
-  const emailRef = useRef('');
-  const nameRef = useRef('');
-  const passwordRef = useRef('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    if (!emailRef.current || !passwordRef.current) {
+    if (!email || !password || !name) {
       Alert.alert('Đăng ký thất bại', 'Vui lòng nhập đầy đủ thông tin');
       return;
     }
 
-    let name = nameRef.current.trim();
-    let email = emailRef.current.trim();
-    let password = passwordRef.current.trim();
-
     setLoading(true);
 
     try {
-      // Firebase Email Sign-Up
+      // Tạo tài khoản người dùng
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
-      // After creating the user, you can update the user profile with their name
-      await user.updateProfile({
-        displayName: name,
-      });
+
+      // Cập nhật tên hiển thị của người dùng
+      await updateProfile(user, { displayName: name });
 
       setLoading(false);
       Alert.alert('Đăng ký thành công', 'Tài khoản của bạn đã được tạo');
-      console.log('User:', user);
-      // Redirect to another screen after successful sign-up
-      router.push('Login');
+      router.push('Login'); // Điều hướng đến màn hình đăng nhập
     } catch (error) {
       setLoading(false);
-      Alert.alert('Đăng ký thất bại', error.message);
-      console.log('Error during sign-up:', error.message);
+
+      // Xử lý lỗi chi tiết
+      let errorMessage = 'Đã xảy ra lỗi không xác định';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'Email này đã được sử dụng.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Email không hợp lệ.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Mật khẩu phải có ít nhất 6 ký tự.';
+      }
+
+      Alert.alert('Đăng ký thất bại', errorMessage);
     }
   };
 
@@ -58,55 +59,42 @@ const SignUp = () => {
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
-
-        {/* Welcome */}
         <View>
           <Text style={styles.welcomeText}>Hãy,</Text>
           <Text style={styles.welcomeText}>Bắt đầu</Text>
         </View>
 
-        {/* form */}
         <View style={styles.form}>
-          <Text style={{ fontSize: hp(1.5), color: theme.colors.text }}>
+          <Text style={{ fontSize: 18, color: theme.colors.text }}>
             Vui lòng điền thông tin để đăng ký
           </Text>
           <Input
-            icon={<Icon name="user" size={26} strokeWidth={1.6} />}
+            icon={<Icon name="user" size={26} />}
             placeholder="Nhập tên của bạn"
-            onChangeText={(value) => {
-              nameRef.current = value;
-            }}
+            value={name}
+            onChangeText={setName}
           />
           <Input
-            icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
+            icon={<Icon name="mail" size={26} />}
             placeholder="Nhập email"
-            onChangeText={(value) => {
-              emailRef.current = value;
-            }}
+            value={email}
+            onChangeText={setEmail}
           />
           <Input
-            icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
+            icon={<Icon name="lock" size={26} />}
             placeholder="Nhập mật khẩu"
             secureTextEntry
-            onChangeText={(value) => {
-              passwordRef.current = value;
-            }}
+            value={password}
+            onChangeText={setPassword}
           />
 
-          {/* Button */}
           <Button title="Đăng ký" loading={loading} onPress={onSubmit} />
         </View>
 
-        {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Bạn đã có tài khoản?</Text>
           <Pressable onPress={() => router.push('Login')}>
-            <Text
-              style={[
-                styles.footerText,
-                { color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold },
-              ]}
-            >
+            <Text style={[styles.footerText, { color: theme.colors.primaryDark }]}>
               Đăng nhập
             </Text>
           </Pressable>
@@ -116,26 +104,19 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 45,
-    paddingHorizontal: wp(5),
+    paddingHorizontal: 16,
   },
   welcomeText: {
-    fontSize: hp(4),
-    fontWeight: theme.fonts.semibold,
+    fontSize: 36,
+    fontWeight: 'bold',
     color: theme.colors.text,
   },
   form: {
     gap: 25,
-  },
-  forgotPassword: {
-    textAlign: 'right',
-    fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
   },
   footer: {
     flexDirection: 'row',
@@ -146,6 +127,8 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: 'center',
     color: theme.colors.text,
-    fontSize: hp(1.6),
+    fontSize: 16,
   },
 });
+
+export default SignUp;
