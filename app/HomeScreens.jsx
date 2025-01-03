@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import TrendingBooks from '../components/trendingBooks';
 import BookList from '../components/bookList';
+import { useRouter } from 'expo-router';  // Add this import
 
 const HomeScreens = () => {
   const [trending] = useState([
@@ -16,6 +17,7 @@ const HomeScreens = () => {
   const [upcoming, setUpcoming] = useState([1,2,3]);
   const [topRated, setTopRated] = useState([1,2,3]);
 
+  const router = useRouter();  // Add this
 
   const handleClick = (item) => {
     console.log('Clicked on:', item.title);
@@ -26,11 +28,16 @@ const HomeScreens = () => {
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="light" />
         <View style={styles.header}>
-          <Bars3CenterLeftIcon size={30} strokeWidth={2} color="white" />
+          <TouchableOpacity 
+            style={styles.optionButton}
+            onPress={() => router.push('/CategoryScreen')}  // Add this
+          >
+            <Bars3CenterLeftIcon size={30} strokeWidth={2} color="white" />
+          </TouchableOpacity>
           <Text style={styles.logoText}>
             <Text style={styles.logoHighlight}>E</Text>-Books
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/SearchScreen')}>
             <MagnifyingGlassIcon size={30} strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
@@ -58,6 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1F1F1F',
+    paddingTop: 25,
   },
   safeArea: {
     backgroundColor: '#1F1F1F',
