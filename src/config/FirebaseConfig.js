@@ -1,7 +1,10 @@
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
-
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import { getDatabase } from 'firebase/database'; 
 // Firebase config cho ứng dụng React Native
 const firebaseConfig = {
   apiKey: "AIzaSyALpnD1mYK7VuaFmuEDstaYHw8pzuHdZ7Y",
@@ -14,10 +17,11 @@ const firebaseConfig = {
   measurementId: "G-6HF712MFV0",
 };
 
-// Khởi tạo Firebase app
-export const firebaseAuth = auth();
-export const firebaseFirestore = firestore();
-export const firebaseStorage = storage();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-export default app;
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const database = getDatabase(app);
+export {auth, signInWithEmailAndPassword };
 

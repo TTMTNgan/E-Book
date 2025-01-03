@@ -1,0 +1,101 @@
+{
+  "authors": {
+    "authorId1": {
+      "name": "John Smith",
+      "keyword": "adventure",
+      "description": "An adventure writer",
+      "created_at": "2022-01-01T00:00:00",
+      "updated_at": "2022-01-02T00:00:00"
+    },
+    "authorId2": {
+      "name": "Emily Davis",
+      "keyword": "mystery",
+      "description": "A mystery writer",
+      "created_at": "2022-02-01T00:00:00",
+      "updated_at": "2022-02-02T00:00:00"
+    }
+  },
+  "categories": {
+    "categoryId1": {
+      "name": "Adventure",
+      "parent_id": 0,
+      "keyword": "exploration",
+      "description": "Exciting adventures and quests",
+      "created_at": "2022-03-01T00:00:00",
+      "updated_at": "2022-03-02T00:00:00"
+    },
+    "categoryId2": {
+      "name": "Mystery",
+      "parent_id": 0,
+      "keyword": "suspense",
+      "description": "Mysterious stories with twists",
+      "created_at": "2022-04-01T00:00:00",
+      "updated_at": "2022-04-02T00:00:00"
+    }
+  },
+  "books": {
+    "bookId1": {
+      "name": "The Great Adventure",
+      "content": "Adventure content",
+      "view": 1000,
+      "status": 1,
+      "source": "Source1",
+      "image": "https://example.com/book1.jpg",
+      "user_id": "userId1",
+      "keyword": "adventure, travel",
+      "description": "An exciting journey across the world",
+      "created_at": "2022-05-01T00:00:00",
+      "updated_at": "2022-05-02T00:00:00",
+      "authors": {
+        "authorId1": true
+      },
+      "categories": {
+        "categoryId1": true
+      },
+      "chapters": {
+        "chapterId1": {
+          "name": "Chapter 1: The Beginning",
+          "content": "Content of chapter 1",
+          "view": 100,
+          "created_at": "2022-06-01T00:00:00",
+          "updated_at": "2022-06-02T00:00:00"
+        },
+        "chapterId2": {
+          "name": "Chapter 2: The Journey Continues",
+          "content": "Content of chapter 2",
+          "view": 200,
+          "created_at": "2022-06-03T00:00:00",
+          "updated_at": "2022-06-04T00:00:00"
+        }
+      }
+    }
+  },
+  "users": {
+    "userId1": {
+      "name": "John Doe",
+      "created_at": "2022-07-01T00:00:00",
+      "updated_at": "2022-07-02T00:00:00",
+      "email": "john.doe@example.com",
+      "numberphone": "123456789",
+      "password": "hashed_password",
+      "level": 1,
+      "remember_token": "token123"
+    }
+  },
+  "viewed": {
+    "viewId1": {
+      "book_id": "bookId1",
+      "chapter_id": "chapterId1",
+      "user_id": "userId1",
+      "created_at": "2022-08-01T00:00:00",
+      "updated_at": "2022-08-02T00:00:00"
+    }
+  },
+  "favorites": {
+    "favoriteId1": {
+      "book_id": "bookId1",
+      "user_id": "userId1",
+      "created_at": "2022-08-03T00:00:00"
+    }
+  }
+}

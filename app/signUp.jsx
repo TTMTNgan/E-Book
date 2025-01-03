@@ -10,6 +10,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { auth } from '../src/config/FirebaseConfig';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getDatabase, ref, set } from 'firebase/database'; // Thêm import Realtime Database
 
 const SignUp = () => {
   const router = useRouter();
@@ -33,6 +34,18 @@ const SignUp = () => {
 
       // Cập nhật tên hiển thị của người dùng
       await updateProfile(user, { displayName: name });
+
+      // Cập nhật thông tin người dùng vào Firebase Realtime Database
+      const db = getDatabase();
+      const userRef = ref(db, 'users/' + user.uid); // Sử dụng user.uid làm key
+      await set(userRef, {
+        email: email,
+        name: name,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        level: 1, // Mức độ mặc định
+        numberphone: '', // Mặc định là trống, có thể yêu cầu người dùng cập nhật sau
+      });
 
       setLoading(false);
       Alert.alert('Đăng ký thành công', 'Tài khoản của bạn đã được tạo');
