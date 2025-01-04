@@ -3,6 +3,7 @@ import React from 'react'
 import { useRouter } from 'expo-router'
 import ScreenWrapper from '@/components/ScreenWrapper';
 import 'react-native-gesture-handler'
+import 'react-native-reanimated';
 
 const index = () => {
   const router = useRouter();
